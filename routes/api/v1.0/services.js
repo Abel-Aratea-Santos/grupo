@@ -2,10 +2,10 @@ var express = require('express');
 var multer = require('multer');
 var router = express.Router();
 //var _ = require("underscore");
-var User = require("../../../database/collections/user");
-var Img = require("../../../database/collections/img");
-var Vecindario = require("../../../database/collections/vecindario");
-var Casa = require("../../../database/collections/casa");
+var Inmueble = require("../../../database/collections/inmueble");
+//var Img = require("../../../database/collections/img");
+//var Vecindario = require("../../../database/collections/vecindario");
+//var Casa = require("../../../database/collections/home");
 
 var storage = multer.diskStorage({
   destination: "./public/avatars",
@@ -21,6 +21,45 @@ var upload = multer({
 
 
 
+//creacion de inmueble
+router.post("/inmueble",(req, res) => {
+
+  if(req.body)
+  var inmueble = {
+      precio : req.body.precio,
+      nombre : req.body.nombre,
+      ubicacion : req.body.ubicacion,
+      superficie : req.body.superficie,
+      num_banos : req.body.num_banos,
+      num_plantas : req.body.num_plantas,
+      num_hab : req.body.num_hab,
+      aire_acondicionado : req.body.aire_acondicionado,
+      calefaccion : req.body.calefaccion,
+      operacion : req.body.operacion,
+      t_inmueble :req.body.t_inmueble,
+      latitud : req.body.latitud,
+      longitud : req.body.longitud,
+      descripcion : req.body.descripcion
+    };
+    var inmuebleData = new Inmueble(inmueble);
+    inmuebleData.save().then( ( ) => {
+      res.status(200).json({
+        "msn" : "Inmueble registrado con exito"
+      });
+    });
+
+});
+
+
+//leer un inmueble
+router.get("/inmueble",(req,res,next) => {
+  Inmueble.find({}).exec( (error,docs) =>{
+    res.status(200).json(docs);
+  })
+});
+
+
+/*
 //CRUD Create, Read, Update, Delete
 //Creation of users
 router.post("/userimg", (req, res) => {
@@ -58,8 +97,6 @@ router.post("/user", (req, res) => {
   }
   var user = {
     name : req.body.name,
-    altura : req.body.altura,
-    peso : req.body.peso,
     edad : req.body.edad,
     sexo : req.body.sexo,
     email : req.body.email
@@ -101,7 +138,7 @@ router.get(/user\/[a-z0-9]{1,}$/, (req, res) => {
 
 //-----------------------------------------------------------
 
-
+/*
 
 
 
@@ -198,6 +235,6 @@ router.get(/home\/[a-z0-9]{1,}$/, (req, res) => {
 
 
 
-
+*/
 
 module.exports = router;
